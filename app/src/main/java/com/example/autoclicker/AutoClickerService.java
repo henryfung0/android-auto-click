@@ -3,12 +3,15 @@ package com.example.autoclicker;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
 import android.graphics.Path;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.hardware.display.VirtualDisplay;
 import android.media.ImageReader;
+import android.media.Image;
+import java.nio.ByteBuffer;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.util.DisplayMetrics;
@@ -90,7 +93,17 @@ public class AutoClickerService extends AccessibilityService {
             return null;
         }
         try {
-            Bitmap latestBitmap = imageReader.acquireLatestImage().getPlanes()[0].getBuffer().asReadOnlyBuffer().toBitmap();
+                        Image image = imageReader.acquireLatestImage();
+            Image.Plane[] planes = image.getPlanes();
+            ByteBuffer buffer = planes[0].getBuffer();
+            int pixelStride = planes[0].getPixelStride();
+            int rowStride = planes[0].getRowStride();
+            int rowPadding = rowStride - pixelStride * image.getWidth();
+
+            // Create a new bitmap
+            Bitmap latestBitmap = Bitmap.createBitmap(image.getWidth() + rowPadding / pixelStride, image.getHeight(), Bitmap.Config.ARGB_8888);
+            latestBitmap.copyPixelsFromBuffer(buffer);
+            image.close();
             return Bitmap.createBitmap(latestBitmap, bounds.left, bounds.top, bounds.width(), bounds.height());
         } catch (Exception e) {
             e.printStackTrace();
