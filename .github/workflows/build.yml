@@ -50,6 +50,9 @@ jobs:
           gradle-version: '8.5'
           arguments: assembleRelease
 
+      - name: List files in the release directory
+        run: ls -R app/build/outputs/apk/release
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
