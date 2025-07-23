@@ -50,8 +50,8 @@ jobs:
           gradle-version: '8.5'
           arguments: assembleRelease
 
-      - name: List build outputs
-        run: ls -R app/build/outputs
+      - name: Find release APK
+        run: find app/build/outputs -name "*.apk"
 
       - name: Create Release
         id: create_release
