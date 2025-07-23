@@ -3,6 +3,7 @@ package com.example.autoclicker;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
 import android.graphics.Path;
+import android.graphics.PixelFormat;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -148,7 +149,7 @@ public class AutoClickerService extends AccessibilityService {
         int width = metrics.widthPixels;
         int height = metrics.heightPixels;
 
-        imageReader = ImageReader.newInstance(width, height, android.graphics.ImageFormat.RGBA_8888, 2);
+        imageReader = ImageReader.newInstance(width, height, android.graphics.PixelFormat.RGBA_8888, 2);
         virtualDisplay = mediaProjection.createVirtualDisplay("ScreenCapture",
                 width, height, density, 
                 android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
