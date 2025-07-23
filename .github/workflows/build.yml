@@ -52,12 +52,8 @@ jobs:
 
 
 
-      - name: Find release APK
-        id: find_apk
-        run: |
-          apk_path=$(find app/build/outputs/apk/release -name "*.apk" -type f | head -n 1)
-          echo "apk_path=$apk_path" >> $GITHUB_OUTPUT
-          echo "apk_name=$(basename $apk_path)" >> $GITHUB_OUTPUT
+      - name: List all build outputs
+        run: ls -R app/build/outputs
 
       - name: Create Release
         id: create_release
@@ -77,6 +73,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.find_apk.outputs.apk_path }}
-          asset_name: ${{ steps.find_apk.outputs.apk_name }}
+          asset_path: app/build/outputs/apk/release/app-release.apk # Placeholder, will be corrected after we find the real path
+          asset_name: app-release.apk
           asset_content_type: application/vnd.android.package-archive
